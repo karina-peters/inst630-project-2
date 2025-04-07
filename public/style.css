@@ -1,0 +1,29 @@
+/* ========================== */
+/*          VARIABLES         */
+/* ========================== */
+
+:root {
+  --color-header: #20201f;
+  --color-footer: #20201f;
+  --color-background: white;
+  --color-text-dark: #20201f;
+  --color-text-light: #faf9f6;
+  --border-radius: 0.5rem;
+}
+
+/* ========================== */
+/*      GENERAL STYLES        */
+/* ========================== */
+
+body {
+  font-family: "Helvetica", -apple-system, sans-serif;
+  background-color: var(--color-background);
+  margin: 0;
+}
+
+main {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
