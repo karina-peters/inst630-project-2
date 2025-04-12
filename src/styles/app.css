@@ -3,10 +3,10 @@
 /* ========================== */
 
 :root {
-  --color-header: #20201f;
-  --color-footer: #20201f;
-  --color-background: white;
-  --color-text-dark: #20201f;
+  --color-header: #0b0500;
+  --color-footer: #0b0500;
+  --color-background: #0b0500;
+  --color-text-dark: black;
   --color-text-light: #faf9f6;
   --border-radius: 0.5rem;
 }
@@ -26,4 +26,20 @@ main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+}
+
+.container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.data-vis {
+  margin: 2rem;
+  border: 2px solid white;
+}
+
+.vis-title {
+  color: var(--color-text-light);
+  font-weight: normal;
+  text-transform: uppercase;
 }

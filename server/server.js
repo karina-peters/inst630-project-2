@@ -7,15 +7,13 @@ import { configDotenv } from "dotenv";
 import { fileURLToPath } from "url";
 
 import { getHeaders, getUrl, Response } from "./utils.js";
+import stationData from "./data/stations.json" with { type: "json" };
 
 // Load .env file
 configDotenv();
 
 const app = express();
 const port = process.env.PORT || 3000;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Parse request.body and make it available
 app.use(bodyParser.json());
@@ -24,11 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
-app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/index.html");
-});
-
-// WMATA API wrapper
+// Fetch dataset from WMATA API
 app.get("/api/routes", async (req, res) => {
   console.log("fetching routes...");
 
@@ -49,20 +43,16 @@ app.get("/api/routes", async (req, res) => {
   }
 });
 
-app.get("/api/trains", async (req, res) => {
-  console.log("fetching trains...");
+// Fetch supplementary data file
+app.get("/api/stations/transfer", async (req, res) => {
+  console.log("fetching stations...");
 
   try {
-    const response = await fetch(getUrl("TrainPositions/TrainPositions", { contentType: "json" }), {
-      method: "GET",
-      headers: getHeaders(),
-    });
-
-    const data = await response.json().then((json) => json["TrainPositions"] || []);
-    if (!data || data.length === 0) {
+    if (!stationData) {
       throw new Error("data is null or empty");
     }
 
+    const data = stationData.filter((s) => s.IsTransfer).map((s) => ({ code: s.Code, name: s.Name }));
     return Response.OK(res, data);
   } catch (error) {
     return Response.Error(res, 500, error.message);
