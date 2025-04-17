@@ -8,11 +8,31 @@ const bubbleGap = 4;
 class BubbleChart {
   constructor(data) {
     this.data = Array.from(data.entries());
-    this.canvasSize = {
-      width: 400,
-      height: 400,
-    };
+    this.scale = 1;
+    this.breakpoint = 600;
+    this.canvasSize = this.getCanvasSize();
   }
+
+  getCanvasSize = () => {
+    // TODO: actually calculate these sizes
+    let width = 400;
+    let height = 400;
+
+    // Handle breakpoints
+    if (window.innerWidth < this.breakpoint) {
+      this.scale = 0.75;
+      width = 312;
+      height = 300;
+    } else {
+      this.scale = 1;
+    }
+
+    // Calculate dimensions
+    // const width = ;
+    // const height = ;
+
+    return { width, height };
+  };
 
   draw = async (p) => {
     // Preserve context
@@ -20,24 +40,34 @@ class BubbleChart {
 
     const w = self.canvasSize.width;
     const h = self.canvasSize.height;
-    const offsetX = w / 2;
-    const offsetY = h / 2;
+    const offsetX = 200; // w / 2;
+    const offsetY = 200; // h / 2;
 
     // Call p5.js functions
     p.setup = () => {
       p.createCanvas(w, h);
       p.noLoop();
 
+      p.windowResized = () => {
+        self.canvasSize = this.getCanvasSize();
+
+        p.resizeCanvas(self.canvasSize.width, self.canvasSize.height);
+        p.redraw();
+      };
+
       console.log("BubbleChart: p5.js setup function executed!");
     };
 
     p.draw = () => {
+      p.scale(self.scale);
       p.background(backgroundColor);
+
       // Draw graph
       let r0 = 0;
       let rCurr = 0;
       let rPrev = 0;
       let posX, posY;
+
       self.data.map(([lineCode, stnCount], index) => {
         // Create Circles
         rPrev = rCurr;

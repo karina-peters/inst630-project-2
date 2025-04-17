@@ -9,30 +9,52 @@ const textMargin = 40;
 
 class BarChart {
   constructor(data) {
-    this.data = Array.from(data.entries());
-    this.canvasSize = {
-      width: Math.max(...data.values()) * multiplier + padding.left + padding.right,
-      height: padding.top + padding.bottom + [...data.keys()].length * (barGap + barHeight) - barGap,
-    };
+    this.containter = this.data = Array.from(data.entries());
+    this.scale = 1;
+    this.breakpoint = 668;
+
+    this.setCanvasSize();
   }
+
+  setCanvasSize = () => {
+    // Handle breakpoints
+    if (window.innerWidth < this.breakpoint) {
+      this.scale = 0.5;
+    } else {
+      this.scale = 1;
+    }
+
+    // Calculate dimensions
+    const maxBarWidth = Math.max(...this.data.map((d) => d[1]));
+    const width = this.scale * (maxBarWidth * multiplier + padding.left + padding.right);
+    const height = this.scale * (padding.top + padding.bottom + [...this.data.keys()].length * (barGap + barHeight) - barGap);
+
+    this.canvasSize = { width, height };
+  };
 
   draw = async (p) => {
     // Preserve context
     const self = this;
 
-    let w = self.canvasSize.width;
-    let h = self.canvasSize.height;
-
     // Call p5.js functions
     p.setup = () => {
-      p.createCanvas(w, h);
+      p.createCanvas(self.canvasSize.width, self.canvasSize.height);
       p.noLoop();
+
+      p.windowResized = () => {
+        self.setCanvasSize();
+
+        p.resizeCanvas(self.canvasSize.width, self.canvasSize.height);
+        p.redraw();
+      };
 
       console.log("BarChart: p5.js setup function executed!");
     };
 
     p.draw = () => {
+      p.scale(self.scale);
       p.background(backgroundColor);
+
       // Draw graph
       self.data.map(([lineCode, trackLength], index) => {
         // Create bars

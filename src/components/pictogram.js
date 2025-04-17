@@ -10,11 +10,25 @@ const gutter = 24;
 class PictoChart {
   constructor(data) {
     this.data = Array.from(data.entries()).sort(([stnA, linesA], [stnB, linesB]) => linesB.length - linesA.length);
-    this.canvasSize = {
-      width: this.data[0][1].length * (lineHeight - linePaddingY + lineGap) * 2,
-      height: padding.top + padding.bottom + [...data.keys()].length * (lineGap + lineHeight) - lineGap,
-    };
+    this.scale = 1;
+    this.breakpoint = 668;
   }
+
+  setCanvasSize = (textWidth, badgeWidth) => {
+    // Handle breakpoints
+    if (window.innerWidth < this.breakpoint) {
+      this.scale = 0.55;
+    } else {
+      this.scale = 1;
+    }
+
+    // Calculate dimensions
+    const badgeColWidth = this.data[0][1].length * (badgeWidth + badgeGap) - badgeGap;
+    const width = this.scale * (textWidth + gutter + badgeColWidth);
+    const height = this.scale * (padding.top + padding.bottom + [...this.data.keys()].length * (lineGap + lineHeight) - lineGap);
+
+    this.canvasSize = { width, height };
+  };
 
   draw = async (p) => {
     // Preserve context
@@ -30,21 +44,28 @@ class PictoChart {
     p.setup = () => {
       p.textSize(fontSize);
 
-      // Get longest station name to calculate column width
+      // Get longest station name to calculate canvas size
       const longestName = stnNames.reduce((currMax, name) => (name.length > currMax.length ? name : currMax), "");
-
       textColWidth = p.textWidth(longestName);
-      const badgeColWidth = self.data[0][1].length * (badgeWidth + badgeGap) - badgeGap;
-      const tableHeight = padding.top + padding.bottom + [...self.data.keys()].length * (lineGap + lineHeight) - lineGap;
+      self.setCanvasSize(textColWidth, badgeWidth);
 
-      p.createCanvas(textColWidth + gutter + badgeColWidth, tableHeight);
+      p.createCanvas(self.canvasSize.width, self.canvasSize.height);
       p.noLoop();
+
+      p.windowResized = () => {
+        self.setCanvasSize(p.textWidth(longestName), badgeWidth);
+
+        p.resizeCanvas(self.canvasSize.width, self.canvasSize.height);
+        p.redraw();
+      };
 
       console.log("PictoChart: p5.js setup function executed!");
     };
 
     p.draw = () => {
+      p.scale(self.scale);
       p.background(backgroundColor);
+
       // Draw graph
       self.data.map(([stnName, lineCodes], index) => {
         let posX = textColWidth;

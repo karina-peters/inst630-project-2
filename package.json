@@ -6,10 +6,10 @@
   "private": "true",
   "type": "module",
   "scripts": {
+    "build": "webpack",
     "server:dev": "node server/server.js",
     "client:dev": "webpack-dev-server",
-    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
-    "deploy": "gh-pages -d dist"
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\""
   },
   "author": "Karina Peters",
   "license": "ISC",
@@ -30,6 +30,7 @@
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "gh-pages": "^6.3.0",
+    "html-webpack-plugin": "^5.6.3",
     "node-fetch": "^3.3.2",
     "p5": "^1.11.3"
   }

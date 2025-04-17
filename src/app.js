@@ -25,6 +25,7 @@ const drawBar = (data, container) => {
   // Create wrapper element
   const vis0 = createContainer(0);
   drawVisTitle(vis0, "Track Length");
+  drawVisDesc(vis0, "The relative track length");
 
   // Append to container
   container.appendChild(vis0);
@@ -45,7 +46,8 @@ const drawBar = (data, container) => {
 const drawBubble = (data, container) => {
   // Create wrapper element
   const vis1 = createContainer(1);
-  drawVisTitle(vis1, "Stations per Line");
+  drawVisTitle(vis1, "Stations");
+  drawVisDesc(vis1, "The number of stations per line.");
 
   // Append to container
   container.appendChild(vis1);
@@ -75,6 +77,7 @@ const drawOverlap = (data, container) => {
   // Create wrapper element
   const vis2 = createContainer(2);
   drawVisTitle(vis2, "Interlining");
+  drawVisDesc(vis2, "The relative amount of shared track per pair of overlapping lines.");
 
   // Append to container
   container.appendChild(vis2);
@@ -125,6 +128,7 @@ const drawPicto = (data, stations, container) => {
   // Create wrapper element
   const vis3 = createContainer(3);
   drawVisTitle(vis3, "Transfer Stations");
+  drawVisDesc(vis3, "The lines served by each transfer station.");
 
   // Append to container
   container.appendChild(vis3);
@@ -173,6 +177,14 @@ const drawVisTitle = (container, title) => {
   titleElement.textContent = title;
 
   container.appendChild(titleElement);
+};
+
+const drawVisDesc = (container, desc) => {
+  const descElement = document.createElement("p");
+  descElement.classList.add("vis-desc");
+  descElement.textContent = desc;
+
+  container.appendChild(descElement);
 };
 
 document.addEventListener("DOMContentLoaded", async () => main());

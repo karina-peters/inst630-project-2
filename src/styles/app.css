@@ -22,24 +22,71 @@ body {
 }
 
 main {
-  padding: 1rem;
+  padding: 0;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 .container {
+  padding: 0 4rem 3rem 4rem;
   display: flex;
   flex-flow: row wrap;
+  column-gap: 4rem;
 }
 
+/* ========================== */
+/*        HEADER & NAV        */
+/* ========================== */
+
+.header {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 4rem;
+  color: var(--color-text-light);
+  border-bottom: 2px solid var(--color-text-light);
+}
+
+.header h1 {
+  font-size: 2rem;
+}
+
+/* ========================== */
+/*      CHART STYLES        */
+/* ========================== */
+
 .data-vis {
-  margin: 2rem;
-  border: 2px solid white;
+  flex: 1;
+  margin: 2rem 0;
+  /* border: 2px solid white; */
 }
 
 .vis-title {
   color: var(--color-text-light);
-  font-weight: normal;
+  margin: 1rem 0 1rem 0;
+  font-weight: bold;
   text-transform: uppercase;
+}
+
+.vis-desc {
+  color: var(--color-text-light);
+  margin: 1rem 0 2rem 0;
+  font-size: 1.5rem;
+  font-weight: normal;
+  text-wrap: wrap;
+}
+
+@media screen and (max-width: 668px) {
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .header,
+  .container {
+    padding: 0 2rem;
+  }
+
+  .vis-desc {
+    font-size: 1rem;
+  }
 }
