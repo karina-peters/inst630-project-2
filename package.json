@@ -8,7 +8,8 @@
   "scripts": {
     "server:dev": "node server/server.js",
     "client:dev": "webpack-dev-server",
-    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\""
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "deploy": "gh-pages -d dist"
   },
   "author": "Karina Peters",
   "license": "ISC",
@@ -28,6 +29,7 @@
     "copy-webpack-plugin": "^13.0.0",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
+    "gh-pages": "^6.3.0",
     "node-fetch": "^3.3.2",
     "p5": "^1.11.3"
   }
